@@ -3,7 +3,7 @@ import axios from 'axios';
 
 declare const tinymce: TinyMCE;
 
-const setup = (editor: Editor, url: string): void => {
+const setup = (editor: Editor): void => {
   const element_images = []
   const element_ids = []
 
@@ -29,8 +29,6 @@ const setup = (editor: Editor, url: string): void => {
           text: 'Close'
         },
       ],
-      onAction:  function (api) {
-      },
       onSubmit: function (api) {
         api.close();
       }
@@ -40,14 +38,14 @@ const setup = (editor: Editor, url: string): void => {
   editor.ui.registry.addButton('tiny-cloudinary-mce', {
     text: 'Cloudinary',
     onAction: () => {
-      var config = {
+      const config = {
         headers: {'Access-Control-Allow-Origin': '*'}
       };
       axios.get(`${window.location.host}/api/v1/cloudinary_images`, config)
       .then(function (response) {
         console.log(response);
         response.data.resources.forEach( function(el){
-          let item = {
+          const item = {
             type: 'htmlpanel', // component type
             html: `<div id="${el.asset_id}"><div style="background-image: url('${el.url}');width:120px;height:120px;background-size:cover;"></div></div>`
           };
@@ -63,7 +61,7 @@ const setup = (editor: Editor, url: string): void => {
       .then(function (response) {
         response.forEach( function(el){
           console.log(el);
-          let el_img = document.getElementById(el.id);
+          const el_img = document.getElementById(el.id);
           el_img.addEventListener("click", insert_cloudinary_image, false);
         })
       })
